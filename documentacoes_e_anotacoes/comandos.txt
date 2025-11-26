@@ -1,0 +1,32 @@
+1. Compilar arquivo simples:
+
+    gcc arquivo.c
+
+Rodar:
+    
+    ./a.out
+
+
+2. Nomear o executável (-o)
+
+    gcc arquivo.c -o meu_programa
+
+Rodar:
+
+    ./meu_programa
+
+
+3. Ativar avisos importantes (-Wall e -Wextra)
+
+    Essas são flags OBRIGATÓRIAS pra quem quer evitar bugs invisíveis.
+
+    gcc arquivo.c -Wall -Wextra -o programa
+
+
+4. Compilar com depuração (-g)
+
+    Isso permite usar debugger (gdb, vscode, etc.):
+
+        gcc arquivo.c -g -o programa
+
+
