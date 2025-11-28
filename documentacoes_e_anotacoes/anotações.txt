@@ -1,0 +1,83 @@
+<stdio.h>: Biblioteca da linguagem C que serve para simplficar entrada e saída de dados
+
+printf("");: Nós permite realizar entrada e saída de dados e colocar textos
+
+scanf(%<especificador>, &<variável>);: Nos permite adicionar um entrada de dados via teclado 
+e guarda a referência
+
+Especificadores:
+
+    | Especificador | O que faz                  | Exemplo                   |
+    | ------------- | -------------------------- | ------------------------- |
+    |   %d / %i     | inteiro decimal            | `printf("%d", 25)`        |
+    |   %f          | número decimal com 6 casas | `printf("%f", 3.14)`      |
+    |   %.Nf        | número decimal com N casas | `printf("%.2f", 3.14159)` |
+    |   %c          | caractere                  | `printf("%c", 'A')`       |
+    |   %s          | string (char *)            | `printf("%s", "Renato")`  |
+    |   %o          | inteiro em octal           | `printf("%o", 64)`        |
+    |   %x / %X     | hexadecimal                | `printf("%x", 255)`       |
+
+&: faz 3 coisas principais:
+    - Pega endereço da variável (ponteiros)
+    - Faz operação bit a bit AND
+    - É usado para passar variável por referência em funções
+
+    E NÃO confundir com:
+    
+        - && → operador lógico “E”
+
+        - & → operador bitwise ou endereço
+
+Todas as sequências de escape:
+
+    | Escape   | Significado                                |
+    | -------- | ------------------------------------------ |
+    | **\n**   | nova linha (line break)                    |
+    | **\t**   | tabulação (TAB)                            |
+    | **\r**   | carriage return (volta ao início da linha) |
+    | **\b**   | backspace                                  |
+    | **\a**   | alerta/“bell” (bip sonoro)                 |
+    | **\f**   | form feed (mudança de página — antigo)     |
+    | **\v**   | tabulação vertical                         |
+    | **\**    | barra invertida `\`                        |
+    | **'**    | apóstrofo `'`                              |
+    | **"**    | aspas `"`                                  |
+    | **?**    | caractere `?` protegido (antiquado)        |
+    | **\0**   | caractere nulo (fim de string)             |
+    | **\xHH** | caractere em hexadecimal                   |
+    | **\ooo** | caractere em octal                         |
+
+Outras sequencias de escapes importantes:
+
+    - \\: para você escrever uma barra invertida na tela
+
+    - \": permite escrever aspas dentro da string:
+
+    - \0: marca o fim de uma string em C:
+
+    - \x48: caractere hexadecimal equivalente a “H”
+
+    - \101: caractere octal equivalente (também “A”)
+
+
+int: Tipo. referência a tipo de dado que opbterá valores intiros indo de -2147483648 até +2147483647.
+Este também, é um tipo primitivo de C e é exclusiva não podendo a definir como uma variável.
+
+<tipo> <variável>;: É a declaralção de uma variável, tal que possuí um valor padrão aleatório, 
+ao qual chamamos de lixo.
+
+<tipo> <variável> = valor; é quando declaramos a variável e assim definimos um valor a ela,
+tal que precisa ser referenciada pelo seu tipo correspondente. 
+lê se: tipo variável recebe valor
+
+return 0: indica ao sistema que foi tudo ok e rodou bem
+
+ANOTAÇÃO 0: NUNCA ESQUEÇA DE FECHAR AS {} E ADICIONAR ; NO FINAL DE CADA LINHA
+SE NECESSÁRIO.
+
+{}: Ela delimita um bloco de código
+
+;: Delimita o fim da linha e de uma execução ou especificação
+
+//: Comentário em C, ou seja, não é comando, é apenas modo de escrita, ao qual o compilador
+não interpreta e pula ela

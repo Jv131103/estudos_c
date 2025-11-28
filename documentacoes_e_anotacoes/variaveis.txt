@@ -1,0 +1,8 @@
+                                Variáveis
+
+Variáveis são elementos da programação ao qual possuem um tipo, um nome e um
+valor, tal que, servem especificamente para referênciar seu endereço e posição
+na memória, tal que podemos reaproveitar ou sobrescrever com outros dados e
+informações
+
+

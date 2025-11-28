@@ -1,0 +1,183 @@
+1. Compilar arquivo simples:
+
+    gcc arquivo.c
+
+Rodar:
+    
+    ./a.out
+
+
+2. Nomear o executável (-o)
+
+    gcc arquivo.c -o meu_programa
+
+Rodar:
+
+    ./meu_programa
+
+
+3. Ativar avisos importantes (-Wall e -Wextra)
+
+    Essas são flags OBRIGATÓRIAS pra quem quer evitar bugs invisíveis.
+
+    gcc arquivo.c -Wall -Wextra -o programa
+
+
+4. Compilar com depuração (-g)
+
+    Isso permite usar debugger (gdb, vscode, etc.):
+
+        gcc arquivo.c -g -o programa
+
+
+5. Compilar com otimizações (-O2 ou -O3)
+
+    Deixa o executável mais rápido.
+
+        gcc arquivo.c -O2 -o programa
+
+    Níveis:
+
+        -O0 → Sem otimização (padrão)
+
+        -O1 → Otimiza um pouco
+
+        -O2 → Recomendada
+
+        -O3 → Otimização máxima (pode aumentar o tamanho)
+
+
+6. Compilar vários arquivos (.c)
+
+    Para projetos com múltiplos arquivos C:
+
+        gcc main.c util.c math.c -o programa
+
+
+7. Compilar com arquivos .h (headers)
+
+    Não precisa colocar .h no comando, só os .c:
+
+        gcc main.c funcoes.c -o programa
+
+
+8. Compilar criando arquivos objeto (-c)
+
+    Isso é útil pra projetos grandes:
+
+        gcc -c main.c
+        gcc -c funcoes.c
+
+    Isso gera:
+
+        main.o
+        funcoes.o
+
+
+    Depois linka tudo:
+
+        gcc main.o funcoes.o -o programa
+
+
+9. Incluir bibliotecas externas (-l)
+
+    Formato:
+
+        -l<nome da lib>
+
+
+    Exemplos:
+
+        • Linkar biblioteca matemática (necessário no Linux):
+        gcc main.c -lm -o programa
+
+        • SDL2:
+        gcc jogo.c -lSDL2 -o jogo
+
+        • OpenGL:
+        gcc app.c -lGL -lGLU -lglut -o app
+
+
+    • Linkar biblioteca matemática (necessário no Linux):
+
+        gcc main.c -lm -o programa
+
+    • SDL2:
+        
+        gcc jogo.c -lSDL2 -o jogo
+    
+    • OpenGL:
+        
+        gcc app.c -lGL -lGLU -lglut -o app
+
+
+10. Informar caminho para bibliotecas (-L e -I)
+    
+    • Incluir headers:
+        
+        gcc main.c -I/usr/include/meu_pacote
+
+    • Incluir libs (.so, .a):
+        
+        gcc main.c -L/usr/lib/meu_pacote -lminha_lib -o programa
+
+
+11. Ativar todas as warnings possíveis (muito útil)
+
+    gcc arquivo.c -Wall -Wextra -pedantic -o programa
+
+
+    Se quiser warnings ainda MAIORES:
+
+        -Wshadow -Wconversion -Wdouble-promotion -Wformat=2
+
+
+12. Produzir executável estático (tudo embutido)
+
+    Fica maior, mas roda em qualquer máquina Linux:
+
+        gcc main.c -static -o programa
+
+
+13. Criar bibliotecas
+
+    13.1 Criar biblioteca estática (.a)
+        
+        gcc -c funcoes.c
+        ar rcs libfuncoes.a funcoes.o
+        gcc main.c -L. -lfuncoes -o programa
+
+    13.2 Criar biblioteca dinâmica (.so)
+        
+        gcc -fPIC -c funcoes.c
+        gcc -shared -o libfuncoes.so funcoes.o        
+        gcc main.c -L. -lfuncoes -o programa
+
+
+    Rodar com lib local (Linux):
+
+        LD_LIBRARY_PATH=. ./programa
+
+
+14. Verificar versão do GCC
+
+    gcc --version
+
+
+| ======================================================= |
+|               Resumo comandos de ouro                   |
+| ======================================================= |
+| ------------------- | --------------------------------- |
+| Objetivo            | Comando                           |
+| ------------------- | --------------------------------- |
+| Compilar simples    | `gcc main.c`                      |
+| Nomear o programa   | `gcc main.c -o app`               |
+| Avisos importantes  | `gcc main.c -Wall -Wextra -o app` |
+| Debug               | `gcc main.c -g -o app`            |
+| Otimização          | `gcc main.c -O2 -o app`           |
+| Vários arquivos     | `gcc main.c a.c b.c -o app`       |
+| Linkar libs         | `gcc main.c -lm -o app`           |
+| Gerar biblioteca .a | `ar rcs lib.a file.o`             |
+| Gerar lib .so       | `gcc -shared -o lib.so file.o`    |
+| =================== | ================================= |
+
