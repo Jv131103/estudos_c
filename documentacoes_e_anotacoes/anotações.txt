@@ -1,5 +1,8 @@
 <stdio.h>: Biblioteca da linguagem C que serve para simplficar entrada e saída de dados
 
+main(){}: A função principal executada na linguagem C, é nele que define a globalização
+do código 
+
 printf("");: Nós permite realizar entrada e saída de dados e colocar textos
 
 scanf(%<especificador>, &<variável>);: Nos permite adicionar um entrada de dados via teclado 

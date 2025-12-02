@@ -1,0 +1,276 @@
+                                O compilador C
+
+Um compilador é um programa que transforma código fonte (texto que você escreve)
+em código de máquina (binário que o processador executa).
+
+Ele faz 3 grandes coisas:
+
+    1. Entende o que você escreveu
+
+    2. Traduz para instruções da CPU
+
+    3. Gera um executável otimizado e rápido
+
+Pronto. Essa é a essência.
+
+                A pipeline de um compilador (O PROCESSO inteiro)
+
+Todo compilador completo passa por estas etapas:
+
+    1. Lexical Analysis (Análise Léxica) — “o scanner”
+
+        Ele lê seu código char por char e transforma em tokens:
+
+            int x = 10;
+
+        Vira:
+
+            KEYWORD: int
+
+            IDENTIFIER: x
+
+            OPERATOR: =
+
+            NUMBER: 10
+
+            SYMBOL: ;
+
+        Agora é mais fácil analisar.
+    
+    2. Syntax Analysis (Análise Sintática) — “o parser”
+
+        Ele olha se a gramática do C está correta:
+
+            . faltou ;
+
+            . parênteses errados
+
+            . blocos mal formados
+
+            . ordem dos elementos
+
+            . etc
+
+        É aqui que erros tipo:
+
+            expected ')'
+
+        aparecem.
+
+    3. Semantic Analysis (Análise Semântica)
+
+        Agora o compilador verifica o significado:
+
+            Esse tipo combina?
+
+            A variável existe?
+
+            Pode converter isso?
+
+            A função retorna mesmo isso?
+
+        Aqui surgem erros como:
+
+            incompatible pointer type
+
+
+        ou
+
+            ‘x’ undeclared
+
+    4. IR (Intermediate Representation) — “o meio-termo”
+
+        O compilador converte o código para algo meio-C, meio-assembly.
+
+        O mais famoso é o LLVM IR.
+
+        EX:
+
+            int x = 10;
+
+        Vira algo tipo:
+
+            %1 = alloca i32
+            store i32 10, i32* %1
+
+        Isso facilita otimizações!
+
+    5. Optimization (Otimização)
+
+        Agora ele melhora seu código:
+
+            tira instruções inúteis
+
+            reorganiza loops
+
+            substitui operações caras
+
+            remove funções nunca usadas
+
+            inline de funções pequenas
+
+        É aqui onde C fica rápido pra caramba.
+
+    6. Code Generation (Geração de código da CPU)
+
+        Agora ele transforma IR em assembly:
+
+            movl $10, -4(%rbp)
+
+        Cada CPU tem um conjunto de instruções próprio:
+
+            x86
+
+            ARM
+
+            RISC-V
+
+        O compilador gera o que a sua máquina entende.
+
+    7. Assembly → Máquina → Linker → Executável
+
+        O final do processo:
+
+            1. gera assembly
+
+            2. monta em código máquina (assembler)
+
+            3. junta tudo com bibliotecas (linker)
+
+            4. cria o executável
+
+        No Linux o gcc gera um arquivo ELF.
+        No Windows um EXE.
+
+                    
+                    Mitos que você nunca mais vai ter
+
+“O C é interpretado pelo compilador.”
+
+    - Falso — o C vira código nativo, real, puro, que roda direto no processador.
+
+“GCC é o compilador.”
+
+    - Na verdade:
+
+        gcc = driver (controla tudo)
+
+        cc1 = o compilador de verdade
+
+        as = montador
+
+        ld = linker
+
+
+                    O compilador C específico (GCC / Clang)
+
+GCC (GNU Compiler Collection)
+
+    Compilador clássico do Linux
+
+    Muito estável
+
+    Otimizações fortes
+
+    Aceita C, C++, Fortran, Go, Ada…
+
+Clang (LLVM)
+
+    Moderno
+
+    Melhor mensagens de erro
+
+    Otimizações pesadas
+
+    Gera LLVM IR (pode ser otimizado globalmente)
+
+
+                Pré-processador — a parte que ninguém te ensina
+
+Antes do compilador agir, o C passa pelo pré-processador:
+
+    Ele faz:
+
+        incluir arquivos (#include)
+
+        substituir macros (#define)
+
+        compilar condicional (#ifdef)
+
+        concatenar arquivos
+
+        gerar código novo
+
+    EX:
+
+        #define SOMA(a,b) (a+b)
+
+    O pré-processador troca antes de compilar.
+
+
+                            Linker — o herói oculto
+
+O linker:
+
+    junta arquivos .o
+
+    junta bibliotecas .so ou .a
+
+    resolve símbolos (funções/variáveis)
+
+    monta o executável final
+
+Erro famoso:
+
+    undefined reference to 'printf'
+
+
+→ falha no linker
+→ não no compilador.
+
+
+                        Por que C é tão rápido?
+
+1. vira código máquina nativo
+
+2. otimizador muito forte
+
+3. zero camadas intermediárias
+
+4. acesso direto a ponteiros e memória
+
+5. cada instrução bate direto na CPU
+
+Por isso SOs, drivers, bancos e games AAA usam C/C++.
+
+
+                Qual a diferença entre C e outras linguagens?
+
+| Linguagem  | Tipo               | Como roda           |
+| ---------- | ------------------ | ------------------- |
+| C          | Compilada nativa   | vira binário da CPU |
+| Java       | Compilada + VM     | vira bytecode       |
+| Python     | Interpretada       | linha por linha     |
+| JavaScript | Interpretada + JIT | JIT no navegador    |
+| Rust       | Compilada          | igual C             |
+
+C é o mais baixo nível sem virar assembly.
+
+
+            Como criar seu próprio compilador? (visão simples)
+
+Um compilador completo tem:
+
+    Lexer
+
+    Parser
+
+    AST (árvore sintática)
+
+    IR
+
+    Otimizador
+
+    Gerador de código
+
+    Linker

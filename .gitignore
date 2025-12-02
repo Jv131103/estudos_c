@@ -40,6 +40,8 @@
 *.hex
 pratica/*
 !pratica/*.c
+exercicios/*
+!exercicios/*.c
 
 
 # Debug files

@@ -1,0 +1,219 @@
+                                Função Main
+
+
+A main() é o ponto de entrada do programa em C.
+
+É o primeiro lugar que o sistema operacional executa quando seu programa começa.
+
+Tecnicamente:
+
+    Ela é uma função como qualquer outra, mas o compilador + o sistema 
+    operacional esperam que ela exista.
+
+É ela que diz:
+
+    “Quando o usuário abrir este programa, comece por AQUI.”
+
+O SO não chama diretamente main().
+
+Ele chama um código escondido (escrito em assembly e C), chamado:
+
+    . startup code
+
+    . crt0
+ 
+    . runtime
+
+Esse código:
+
+    1. inicializa variáveis globais
+
+    2. monta pilha
+
+    3. chama construtores (se tiver)
+
+    4. resolve variáveis estáticas
+
+    5. chama → main()
+
+E quando main() retorna, volta pro runtime, que:
+
+    limpa memória
+
+    finaliza a execução
+
+    devolve um número pro SO (código de retorno)
+
+Então:
+
+    O programa começa ANTES da main e termina DEPOIS da main.
+
+
+Existem só duas formas oficiais:
+
+    Forma 1 — sem argumentos
+    
+        int main(void)
+
+    ou
+
+        int main()
+
+    Equivalem à mesma coisa.
+
+    Forma 2 — com argumentos da linha de comando
+
+        int main(int argc, char *argv[])
+
+    Aqui:
+
+        argc = quantidade de argumentos
+
+        argv = lista (array) de strings
+
+    Exemplo:
+
+        ./programa teste 123
+
+
+    argc = 3
+
+    argv[0] = "./programa"
+
+    argv[1] = "teste"
+
+    argv[2] = "123"
+
+Formas inválidas:
+
+    Essas são comuns mas ERRADAS:
+
+        void main()
+        main()
+        void main(void)
+
+    Funcionam em alguns compiladores, mas não são padrão C e não devem ser usadas.
+
+Por que main deve retornar int?
+
+    Porque o valor retornado vira o código de saída do programa.
+
+    O padrão é:
+
+        return 0; → terminou bem
+
+        return 1; ou outro valor → ocorreu erro
+
+    Exemplo:
+
+        ./programa
+        echo $?
+
+    Se seu programa retornou 0, o terminal mostrará 0.
+
+Como o compilador trata a main
+
+    C transforma:
+
+        int main() {
+            return 0;
+        }
+
+    Em algo como (versão simplificada):
+
+        _main:
+            ; código inserido pelo compilador antes
+            mov eax, 0
+            ret
+
+    O processo real é maior, mas essa é a ideia.
+
+Como usar argumentos da linha de comando (explicação simples):
+
+    #include <stdio.h>
+
+    int main(int argc, char *argv[]) {
+        printf("Você passou %d argumentos\n", argc);
+
+        for (int i = 0; i < argc; i++) {
+            printf("argv[%d] = %s\n", i, argv[i]);
+        }
+
+        return 0;
+    }
+
+    Rodando:
+
+        ./a.out João 123 C
+
+    Saída:
+
+        Você passou 4 argumentos
+        argv[0] = ./a.out
+        argv[1] = João
+        argv[2] = 123
+        argv[3] = C
+
+A pegadinha que ninguém te conta:
+
+    O char *argv[] é igual a char **argv
+
+    Por quê?
+
+        Porque um array de ponteiros (strings) decai para um ponteiro para ponteiro.
+
+    Por isso estas são equivalentes:
+
+        int main(int argc, char *argv[])
+        int main(int argc, char **argv)
+
+O papel da main na memória:
+
+    Quando seu programa executa:
+
+        o sistema cria uma pilha (stack frame)
+
+        coloca:
+
+            argc
+
+            argv
+
+            endereço de retorno
+
+        chama main
+
+        Ou seja:
+
+            main sempre vive na STACK.
+
+A versão mais completa da main() (avançado):
+
+    int main(int argc, char *argv[], char *envp[])
+
+    Aqui você recebe:
+
+        argumentos
+
+        variáveis de ambiente
+
+            PATH
+
+            USER
+
+            HOME
+
+            etc
+
+    Nem todo compilador aceita, mas faz parte do padrão POSIX.
+
+
+A main não é especial porque ela é mágica, mas sim porque o sistema operacional escolheu ela 
+como o ponto de entrada.
+
+O compilador e o linker fazem um acordo com o SO:
+
+    “Quando o programa começar, chama MAIN.
+    Quando terminar, devolve o valor de MAIN.”
+
+E isso virou convenção global por décadas até hoje.
