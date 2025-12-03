@@ -1,0 +1,222 @@
+                Estruturas de decisão em C
+
+Estruturas condicionais são blocos que permitem ao programa tomar decisões.
+
+Em vez de executar tudo igual sempre, você faz:
+
+    “Se isso acontecer → faça isso
+    Se não → faça aquilo”
+
+É como ensinar o computador a pensar.
+
+                            if — a estrutura mais básica
+
+Forma geral:
+
+    if (condicao) {
+        // código se a condição for verdadeira
+    }
+
+Exemplo:
+
+    if (idade >= 18) {
+        printf("Maior de idade\n");
+    }
+
+A condição deve resultar em 1 (verdadeiro) ou 0 (falso).
+
+                    if … else — quando quero o “se não”
+
+if (nota >= 60) {
+    printf("Aprovado!\n");
+} else {
+    printf("Reprovado!\n");
+}
+
+                if … else if … else — múltiplas condições
+
+Serve para testar vários caminhos.
+
+    if (nota >= 90) {
+        printf("A\n");
+    } else if (nota >= 70) {
+        printf("B\n");
+    } else if (nota >= 50) {
+        printf("C\n");
+    } else {
+        printf("D\n");
+    }
+
+Funciona como uma escada lógica.
+
+                    Condicional curta (ternário)
+
+A forma mais compacta de tomar decisão em C.
+
+    (condicao) ? valor_se_verdade : valor_se_falso;
+
+
+Exemplo:
+
+    int maior = (a > b) ? a : b;
+
+
+É perfeito para:
+
+    escolher valores
+
+    reduzir código
+
+    inicializar variáveis
+
+                    switch — para muitos casos, mais limpo que if/else
+
+Usado quando você quer comparar uma mesma variável com muitos valores.
+
+    switch (opcao) {
+        case 1:
+            printf("Iniciar\n");
+            break;
+        case 2:
+            printf("Configurações\n");
+            break;
+        case 3:
+            printf("Sair\n");
+            break;
+        default:
+            printf("Opção inválida\n");
+    }
+
+A pegadinha do switch: o famoso “fall-through”
+
+Sem break, o código continua para o próximo case.
+
+    switch (x) {
+        case 1:
+            printf("Um\n");
+        case 2:
+            printf("Dois\n");
+    }
+
+Se x == 1 → imprime “Um” e “Dois”.
+
+Isso é uma arma poderosa, mas perigosa.
+
+                        Condições avançadas
+
+Operadores relacionais:
+
+| Operador | Significado    |
+| -------- | -------------- |
+| `==`     | igual          |
+| `!=`     | diferente      |
+| `>`      | maior          |
+| `<`      | menor          |
+| `>=`     | maior ou igual |
+| `<=`     | menor ou igual |
+
+Operadores lógicos:
+
+| Operador | Significado |
+| -------- | ----------- |
+| `&&`     | E lógico    |
+| `||`     | Ou lógico   |
+| `!`      | negação     |
+
+EX:
+
+    if (idade >= 18 && idade <= 60)
+
+    if (sexo == 'M' || sexo == 'F')
+
+    if (!logado)
+
+                            Booleans em C (a verdade verdadeira)
+
+C não tem tipo booleano nativo (antes do C99).
+Mas:
+
+0 = falso
+
+qualquer outro número = verdadeiro
+
+Com C99 pra frente:
+
+    #include <stdbool.h>
+
+    bool ativo = true;
+
+                    Condições complexas com parênteses
+
+Assim como matemática:
+
+    if ((a > b && c > d) || e == 0)
+
+Use parênteses para garantir o que você quer que aconteça.
+
+                    Condição com retorno de função
+
+    if (verificarSenha(senha)) {
+        printf("Permitido");
+    }
+
+
+Se a função retorna 1 → verdadeiro
+Se retorna 0 → falso
+
+                Strings NÃO podem ser comparadas com == em C
+
+Porque == compara endereços da memória, não o conteúdo da string.
+
+    char s1[] = "oi";
+    char s2[] = "oi";
+
+    if (s1 == s2) {   // ERRADO
+        ...
+    }
+
+Isso quase nunca funciona.
+
+int strcmp(const char *s1, const char *s2);
+
+O jeito correto: usar strcmp
+
+A função:
+
+    int strcmp(const char *s1, const char *s2);
+
+
+Ela retorna:
+
+    0 → strings IGUAIS
+
+    < 0 → s1 < s2
+
+    > 0 → s1 > s2
+
+Exemplo:
+
+    if (strcmp(s1, s2) == 0) {
+        printf("São iguais");
+    }
+
+Para ignorar maiúsculas/minúsculas: 
+
+    if (strcasecmp(s1, s2) == 0)
+
+(Em Windows é _stricmp)
+
+Em IF, string vazia é assim:
+
+    if (s1[0] == '\0') {
+        printf("String vazia");
+    }
+
+
+Ou:
+
+    if (!strlen(s1)) {
+        ...
+    }
+
+PS: strlen, strcmp e strcasecmp, pertecem a lib <string.h>
