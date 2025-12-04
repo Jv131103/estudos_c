@@ -14,6 +14,7 @@ Especificadores:
     | ------------- | -------------------------- | ------------------------- |
     |   %d / %i     | inteiro decimal            | `printf("%d", 25)`        |
     |   %f          | número decimal com 6 casas | `printf("%f", 3.14)`      |
+    |   %lf         | número decimal double      | `printf("%lf", 3.14)`     |
     |   %.Nf        | número decimal com N casas | `printf("%.2f", 3.14159)` |
     |   %c          | caractere                  | `printf("%c", 'A')`       |
     |   %s          | string (char *)            | `printf("%s", "Renato")`  |
