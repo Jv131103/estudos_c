@@ -85,3 +85,6 @@ SE NECESSÁRIO.
 
 //: Comentário em C, ou seja, não é comando, é apenas modo de escrita, ao qual o compilador
 não interpreta e pula ela
+
+break: É o ponto de parada do código em um loop ou na função switch case.
+Ele é literealmente, saia dessa condição.
