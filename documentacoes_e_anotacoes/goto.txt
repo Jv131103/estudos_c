@@ -1,0 +1,273 @@
+                                Comando goto
+
+O goto é um comando que desvia o fluxo do programa para um ponto específico marcado por um 
+rótulo.
+
+Pense assim:
+
+    “Pule NOW para aquele lugar ali.”
+
+É literalmente um salto.
+
+Sintaxe:
+
+    goto nome_do_rotulo;
+
+    ...
+
+    nome_do_rotulo:
+        // código aqui
+
+
+Exemplo Simples:
+
+    #include <stdio.h>
+
+    int main() {
+        printf("Antes\n");
+        goto pula;
+        printf("Isso nunca aparece\n");
+
+    pula:
+        printf("Depois\n");
+    }
+
+                    Como o compilador enxerga o goto
+
+O compilador o transforma em:
+
+    uma instrução de salto no assembly (jmp)
+
+    que altera o fluxo normal do código
+
+goto é literalmente um jmp.
+
+                Quando NÃO usar (90% dos casos)
+
+Você NÃO deve usar goto para:
+
+    substituir if/else
+    substituir loops normais
+    escrever código bagunçado tipo espaguete
+    simular laço infinito (use while(1))
+
+Exemplo ruim:
+
+    inicio:
+    printf("Oi");
+    goto inicio;
+
+Funciona, mas é desnecessário e confuso.
+
+                Quando usar (OS CASOS CERTOS)
+
+Agora a parte que quase ninguém te ensina:
+
+O goto tem usos reais e profissionais em:
+
+1. Saída rápida de blocos múltiplos (limpeza de recursos)
+
+Imagine que você abre recursos:
+
+    arquivo
+
+    memória
+
+    socket
+
+    etc
+
+Se der erro no meio, você precisa liberar tudo.
+
+Exemplo profissional:
+
+    FILE *f = fopen("dados.txt", "r");
+    if (!f) goto erro;
+
+    char *buffer = malloc(100);
+    if (!buffer) goto erro;
+
+    int status = processar(f, buffer);
+    if (!status) goto erro;
+
+    fclose(f);
+    free(buffer);
+    return 1;
+
+    erro:
+        if (f) fclose(f);
+        if (buffer) free(buffer);
+        return 0;
+
+2. Sair de múltiplos loops de uma vez
+
+Sem goto você teria flag, variável de controle, gambiarra…
+
+Com goto:
+
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            if (matriz[i][j] == alvo) {
+                goto encontrado;
+            }
+        }
+    }
+
+    printf("Não achou.\n");
+    return 0;
+
+    encontrado:
+    printf("Achou em [%d][%d]\n", i, j);
+
+3. Implementar máquinas de estado simples
+
+    goto permite:
+
+    estado_inicial:
+    ...
+    goto estado_final;
+
+    estado_final:
+    ...
+
+Isso parece bobo, mas é usado em:
+
+    parsers
+
+    compiladores
+
+    interpretadores
+
+    sistemas embarcados
+
+4. Código gerado automaticamente ou de baixo nível
+
+    Compiladores usam goto para montar o fluxo de controle internamente.
+
+                    
+                    goto NÃO é o vilão que dizem
+
+
+Ele recebeu má fama porque iniciantes o usavam errado.
+
+Mas na vida real:
+
+    o Linux Kernel usa goto
+
+    o GCC usa goto
+
+    o SQLite usa goto
+
+    dispositivos embarcados usam goto
+
+    drivers usam goto
+
+Sempre para limpeza de recursos ou saída múltipla de blocos.
+
+                Regras de ouro para usar goto
+
+Pode usar quando:
+
+    você quer sair de vários blocos ao mesmo tempo
+
+    precisa liberar recursos centralizadamente
+
+    quer evitar código duplicado
+
+    está escrevendo lógica de baixo nível
+
+Não use quando:
+
+    um while resolve
+
+    um break resolve
+
+    um return resolve
+
+    um if/else simples resolve
+
+                        Goto não pula para funções
+
+Isso dá erro:
+
+    goto outroLugar; // não pode pular para outra função
+
+        void outra() {
+        outroLugar:
+            ...
+    }
+
+O rótulo precisa estar no mesmo bloco/função.
+
+                    Como o goto vira assembly
+
+Esse código:
+
+    goto fim;
+    ...
+    fim:
+
+
+Vira:
+
+    jmp fim
+    fim:
+
+Sem mistério algum.
+
+                O goto reduz complexidade O(n**2)?
+
+NÃO! O goto NÃO reduz a complexidade O(n²).
+
+Ele quebra a execução mais cedo, mas não muda a quantidade MÁXIMA de operações possíveis 
+no pior caso.
+
+Complexidade de tempo é medida no pior caso (worst case).
+
+Num loop duplo:
+
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            if (condição)
+                goto fim;
+        }
+    }
+    fim:
+
+
+
+Há duas possibilidades:
+
+    1. Melhor caso (best case)
+
+        A condição é satisfeita logo no começo.
+
+        Você sai dos loops imediatamente.
+
+        → Operações executadas: quase 1
+        → Complexidade prática ≈ O(1)
+
+        Mas isso NÃO muda o algoritmo.
+
+    2. Pior caso (worst case)
+
+        A condição NUNCA é satisfeita.
+
+        Então você percorre:
+
+            n × n = n²
+
+        Ou seja:
+
+        Mesmo com goto, no pior caso O(n²) continua sendo O(n²).
+
+Ou seja, o goto muda APENAS o fluxo, NÃO a complexidade. Melhora o desempenho quando a 
+condição aparece cedo, porém, não altera a “família” de complexidade Big-O.
+
+Analogia simples:
+
+    Um algoritmo O(n²) com goto continua podendo rodar n × n vezes.
+
+    Ele só pula fora mais rápido se encontrar algo antes.
+
+    Mas a complexidade analítica considera o pior caso possível, não a média.
