@@ -1,0 +1,114 @@
+                Sobre o comando fflush em C:
+
+- fflush é uma função que força a limpeza (flush) do buffer de um stream 
+(FILE *).
+
+- ela obriga o C a escrever imediatamente tudo que está “guardado” no buffer.
+
+Protótipo:
+
+    int fflush(FILE *stream);
+
+. stream → pode ser stdout, stderr ou um arquivo (FILE *)
+
+. Retorna:
+
+    0 -> Sucesso
+    EOF -> Erro
+
+Em C, entrada e saída são bufferizadas para desempenho.
+
+Exemplo:
+
+    printf("Digite um número: ");
+
+Isso pode não aparecer na tela imediatamente, porque o texto fica no buffer 
+esperando:
+
+    . um \n
+    . o buffer encher
+    . o programa terminar
+    . ou um fflush
+
+                        Uso correto mais comum
+
+. Forçar impressão imediata no terminal
+
+    printf("Digite um número: ");
+    fflush(stdout);
+
+    int x;
+    scanf("%d", &x);
+
+Sem o fflush, o texto pode não aparecer antes do scanf, dependendo do ambiente.
+
+. Usando com arquivos:
+
+    FILE *f = fopen("dados.txt", "w");
+
+    fprintf(f, "Olá, mundo!");
+    fflush(f);   // força gravação no arquivo
+
+    fclose(f);
+
+Sem o fflush, os dados podem ficar só na memória até fechar o arquivo.
+
+                MUITO IMPORTANTE: fflush(stdin)
+
+ERRADO (comportamento indefinido):
+
+    fflush(stdin); // NÃO FAÇA ISSO
+
+Por quê?
+
+    O padrão C não define o que acontece
+
+    Alguns compiladores “aceitam”
+
+    Outros quebram
+
+    Outros fazem nada
+
+Portável? NÃO.
+
+                    Forma correta de limpar entrada
+
+Se quiser “limpar” o stdin, use leitura controlada:
+
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+
+Ou use fgets em vez de scanf.
+
+. stdout vs stderr
+
+    stdout → bufferizado
+
+    stderr → não bufferizado (ou line-buffered)
+
+    Por isso:
+
+        printf("Erro!\n");
+
+    pode atrasar, mas:
+
+        fprintf(stderr, "Erro!\n");
+
+    aparece na hora, sem fflush.
+
+Exemplo clássico (bug comum):
+
+    printf("Processando...");
+    sleep(5);
+    printf("feito\n");
+
+Você pode ver tudo de uma vez, depois de 5 segundos.
+
+Correto:
+
+    printf("Processando...");
+    fflush(stdout);
+    sleep(5);
+    printf("feito\n");
+
+

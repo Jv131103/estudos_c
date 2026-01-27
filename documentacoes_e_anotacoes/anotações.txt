@@ -10,16 +10,18 @@ e guarda a referência
 
 Especificadores:
 
-    | Especificador | O que faz                  | Exemplo                   |
-    | ------------- | -------------------------- | ------------------------- |
-    |   %d / %i     | inteiro decimal            | `printf("%d", 25)`        |
-    |   %f          | número decimal com 6 casas | `printf("%f", 3.14)`      |
-    |   %lf         | número decimal double      | `printf("%lf", 3.14)`     |
-    |   %.Nf        | número decimal com N casas | `printf("%.2f", 3.14159)` |
-    |   %c          | caractere                  | `printf("%c", 'A')`       |
-    |   %s          | string (char *)            | `printf("%s", "Renato")`  |
-    |   %o          | inteiro em octal           | `printf("%o", 64)`        |
-    |   %x / %X     | hexadecimal                | `printf("%x", 255)`       |
+    | Especificador | O que faz                     | Exemplo                   |
+    | ------------- | ----------------------------- | ------------------------- |
+    |   %d / %i     | inteiro decimal               | `printf("%d", 25)`        |
+    |   %f          | número decimal com 6 casas    | `printf("%f", 3.14)`      |
+    |   %lf         | número decimal doublee longo  | `printf("%lf", 3.14)`     |
+    |   %ld         | número inteiro longo          | `printf("%lf", 314676767)`|
+    |   %.Nf        | número decimal com N casas    | `printf("%.2f", 3.14159)` |
+    |   %c          | caractere                     | `printf("%c", 'A')`       |
+    |   %s          | string (char *)               | `printf("%s", "Renato")`  |
+    |   %o          | inteiro em octal              | `printf("%o", 64)`        |
+    |   %x / %X     | hexadecimal                   | `printf("%x", 255)`       |
+    |   %e          | notação científica            | `printf("%e", 1234.5678)` |
 
 &: faz 3 coisas principais:
     - Pega endereço da variável (ponteiros)
@@ -88,3 +90,6 @@ não interpreta e pula ela
 
 break: É o ponto de parada do código em um loop ou na função switch case.
 Ele é literealmente, saia dessa condição.
+
+fflush(stdout): é uma função que força a limpeza (flush) do buffer de um stream (FILE *).
+ela obriga o C a escrever imediatamente tudo que está “guardado” no buffer.
