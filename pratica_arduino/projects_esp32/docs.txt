@@ -1,0 +1,78 @@
+Configurando o ESP32 no VS CODE
+
+
+1. Baixe a extensão do VS Code chamado platformio
+
+2. Baixe a extensão do VS Code chamado wokwi
+
+3. Crie o arquivo chamado platformio.ini e faça:
+
+    [env:esp32]
+    platform = espressif32
+    framework = arduino
+    board = esp32dev
+
+
+    # Colocar se precisar. São bibliotecas e extensões
+    lib_deps = 
+        adafruit/Adafruit Unified Sensor@^1.1.9
+        adafruit/DHT sensor library@1.4.4
+
+4. Crie o arquivo wokwi.toml e faça:
+
+    [wokwi]
+    version = 1
+    elf = ".pio/build/esp32/firmware.elf"
+    firmware = ".pio/build/esp32/firmware.bin"
+
+5. Configure o diagram.json:
+
+    - Vá em seu projeto do wokwi na web, e clique no ícone 
+    diagram.json
+
+    PS: Será por lá que vai editar e adicionar objetos
+
+    - Copie o JSON que está lá
+
+    - Abra no VS CODE o seu arquivo criado diagram.json
+
+        . pressione o botão direito no nome do arquivo no topo do VS
+        Code e clique em REOPEN EDITOR WITH ... e lá selecione
+        TEXT EDITOR.
+
+        . Cole o arquivo JSON que pegou do site do wokwi
+
+6. Libere a licença do wokwi fazendo:
+
+    . Vá na configuração view do VS Code
+
+    . Clieque em COMMAND PALLET
+
+    . Digite: wokwi request a new licence
+
+    . Abra e acesse o site
+
+        - Conecte sua conta se não estiver logado
+
+        - Clique em new licence
+
+        - permita que o navegador adicione as informações no VS Code
+
+        - permita que o VS Code leia essa licença
+
+
+7. Crie a pasta src
+
+    PS: É obrigatório, não pode ser outro nome
+
+    - Lá vc pode criar arquivos do tipo .ino, que significa
+    arduino.
+
+
+AQUI VOU SEGUIR UM PADRÃO PARA REUTILIZAR QUANDO PRECISAR:
+
+    1. Quando criar novos projetos, eu simplesmente renomeio o diagram.json
+    para por exemplo diagram_led.json e crio um novo com o projeto novo.
+
+    2. Vou reutilizar o platformio.ini e o wokwi.tomls, apenas adicionando as libs que
+    precisarmos.
