@@ -1,6 +1,12 @@
 # .vscode
 .vscode/
 
+# Imagens
+img/
+images/
+imgs/
+images/
+
 # Prerequisites
 *.d
 

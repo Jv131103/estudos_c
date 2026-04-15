@@ -1,0 +1,209 @@
+            CONCEITOS BÁSICOS SOBRE ELETRÔNICA
+
+O LED (Diodo Emissor de Luz):
+
+    Um LED é quase sempre ligado em série com um resistor para 
+    limitar a corrente que passa pelo seu corpo. Vale mencionar 
+    que LED é muito sensível e queima com facilidade quando 
+    ultrapassa a tensão limite em seus terminais. Então, é 
+    importante que o resistor R atue como um freio da corrente 
+    elétrica para não queimar o LED. Em contrapartida, esse 
+    resistor R pode se aquecer e “fritar” se o trabalho de 
+    frenagem da corrente for além dos limites dos cálculos usando 
+    a Lei de Ohm. Via de regra, você pode ser usar os seguintes 
+    valores de resistor R para cada situação.
+
+    PS: Os valores são aproximados e podem variar + ou - 10%
+
+    O cálculo de R é esse:
+
+        R = (VCC - VLED) / ILED
+
+    Considerando que qualquer cor de led puxa uma corrente
+    (ILED) média de 20mA, então temos:
+
+        R = (VCC - VLED) / 0.02
+
+    Substitua o valor de VCC- VLED de acordo com a tabela acima que
+    você vai encontrar os respectivos valores de R.
+
+    Como por exemplo, considere o LED vermelho ligado em 9V
+
+        R = (9 - 2) / 0.02
+
+        R = 350
+
+    Para usar um ESP32 e controlar um LED externo a ele,
+    você pode montar o seguinte circuito no Wonki.com
+
+Relé:
+
+    O relé é um componente eletrônico comum em diversos sistemas 
+    de controle e automação, sendo especialmente aplicado em 
+    projetos que envolvem microcontroladores como o ESP32. No 
+    contexto de um sistema de IA, ele permite integrar sistemas 
+    eletrônicos que podem controlar dispositivos de alta potência 
+    com segurança e eficiência, ampliando as possibilidades de 
+    automação inteligente.
+
+    Um relé é basicamente um interruptor de luz, porém 
+    eletromecânico, que permite controlar dispositivos 
+    “perigosos” que envolvem tensão elétrica da tomada 127V 
+    ou 220V, como lâmpadas e motores, usando sinais de baixa 
+    potência (como os de um microcontrolador). Ele possui esse 
+    formato de caixinha, porque internamente tem uma pequena 
+    bobina que forma um eletroímã que atrai um pedaço de metal 
+    para gerar um contato em outro metal. Por isso, parece um 
+    interruptor residencial simples. O relé é muito usado para 
+    controlar dispositivos de corrente alternada (AC), embora 
+    também seja possível controlar dispositivos de corrente 
+    contínua (DC), com um microcontrolador.
+
+    O relé utilizado no mundo do ESP32 tem a aparência conforme 
+    mostra a figura “Relé azul da família Arduino/ESP”. Ele 
+    possui três pinos pretos (VCC, GND e IN), que significam:
+
+        VCC: pino que recebe 5V de alimentação para energizar o
+        módulo do relé.
+
+        GND: pino Ground ou negativo, que fecha o circuito 
+        da energização do módulo. O relé precisa do positivo 
+        e do negativo para funcionar.
+
+        IN: é o pino que recebe o comando de LIGA/DESLIGA do relé.
+        Quem envia esse comando é o ESP32, e por meio do seu 
+        código-fonte, do seu algoritmo, decide a hora de LIGAR ou 
+        de DESLIGAR a caixinha azul.
+
+    E também possui três pinos azuis (NO, COM e NC), conforme essa 
+    descrição:
+
+        NO: Normally Open, isso significa que esse pino está 
+        nativamente aberto, isto é, a corrente elétrica não passa 
+        por ele enquanto ele estiver no estado DESLIGADO porque 
+        está fisicamente como um interruptor aberto.
+
+        COM: Common, ou seja, esse pino é comum entre os pinos NO 
+        e NC.
+ 
+        NC: Normally Closed, isso significa que esse pino está 
+        nativamente fechado, isto é, a corrente elétrica vai 
+        passar por ele enquanto ele estiver no estado DESLIGADO, 
+        porque está fisicamente com um interruptor fechado.
+
+    PS: os três pinos azuis possuem parafusos para fixar o fio na 
+    parte de “potência”. Os três pinos pretos são VCC, GND e IN.
+
+    Quando inserimos um pulso positivo de 3,3V ou 5V no pino IN do 
+    relé, temos os pinos COM + NO em contato elétrico físico como 
+    se fosse um interruptor simples fechando o circuito da corrente, 
+    e assim, a lâmpada se acende.    
+
+    Quando removemos o pulso do pino IN, isto é, quando conectamos 
+    o pino IN ao GND (negativo), os pinos COM + NO desfazem esse 
+    contato físico, cessando a corrente, e consequentemente, 
+    apagando a lâmpada.
+
+    PROGRAMANDO O RELÊ:
+
+        int relePin = 9;  // Pino GPIO 9 do Arduino Uno conectado ao relé ou pino 23 do ESP32
+        bool releState = false; //a variável tipo bool só pode assumir true ou false
+
+        void setup() {
+            pinMode(relePin, OUTPUT);  // Define o pino do relé como saída
+        }
+
+        void loop() {
+            if (releState) { //testa se releState é True ou False, isto é, Ligado ou Desligado
+                digitalWrite(relePin, HIGH);  // Se o releState for True, então Liga o relé (ativa a carga)
+            } else {
+                digitalWrite(relePin, LOW);   // Senão, releState é False, então desliga o relé (desativa a carga)
+            }
+            delay(2000);  // Aguarda 2 segundos
+            releState = !releState;  // Alterna o estado do relé. Essa lógica é importante para fazer a lâmpada piscar a cada 2 segundo
+        }
+
+    Explicação:
+
+        . void setup(): é uma função que é chamada uma vez quando o programa começa. 
+        Ela é usada para inicializar variáveis, definir modos de pinos e iniciar a 
+        comunicação serial. Mencionamos isso no capítulo anterior.
+        
+        . Serial.begin(9600);: inicia a comunicação serial entre o ESP32 (ou outro 
+        microcontrolador) e o computador com uma taxa de 9600 bits por segundo 
+        (baud rate). Isso permite que o microcontrolador envie dados ao Monitor Serial, 
+        onde você pode visualizar as leituras do sensor.
+        
+        . dht.begin();: inicia o sensor DHT. A função :begin(): é necessária para que o 
+        microcontrolador possa se comunicar corretamente com o sensor, preparando-o para 
+        começar a fazer leituras de temperatura e umidade.
+        
+        . void loop(): é uma função que é chamada repetidamente enquanto o 
+        microcontrolador está ligado. Além disso, é onde o código principal 
+        do programa é executado.
+        
+        . float h = dht.readHumidity();: lê o valor de umidade atual do sensor DHT e o 
+        armazena na variável h. A variável é do tipo float porque a leitura pode 
+        incluir casas decimais, oferecendo maior precisão.
+        
+        . float t = dht.readTemperature();: lê o valor de temperatura atual do sensor 
+        DHT e o armazena na variável t. Assim como h, t é um float para armazenar valores 
+        com casas decimais.
+        
+        . if (isnan(h) || isnan(t)): nessa linha, o código verifica se as leituras de 
+        umidade (h) ou temperatura (t) resultaram em NaN (Not a Number). Isso pode 
+        acontecer se o sensor DHT não estiver conectado corretamente ou se houver um 
+        erro na leitura dos dados.
+        
+        . isnan(): é uma função que retorna true se o valor passado para ela for NaN. 
+        O NaN indica a falha na leitura e que o valor obtido não é numérico.
+        
+        . Serial.println("Falha ao ler do sensor DHT!");: se uma das leituras for NaN, 
+        esta linha envia uma mensagem ao Monitor Serial indicando que houve uma falha 
+        ao ler do sensor. Isso ajuda na depuração, permitindo que o usuário saiba que 
+        algo deu errado.
+        
+        . return;: este comando encerra a execução da função loop() para o ciclo atual, 
+        impedindo que o código continue a executar com valores inválidos. A função 
+        loop() será chamada novamente no próximo ciclo, tentando ler o sensor novamente.
+        
+        . Serial.print("Umidade: ");: envia o texto "Umidade: " para o Monitor Serial, 
+        preparando o usuário para ver o valor de umidade a seguir.
+        
+        . Serial.print(h);: envia o valor de umidade lido (h) para o Monitor Serial. 
+        Como h é um float, ele pode incluir casas decimais, oferecendo precisão na 
+        leitura.
+        
+        . Serial.print(" %\t");: adiciona o símbolo de porcentagem % após o valor de 
+        umidade, seguido de um tabulador :\t: para formatar a saída, tornando-a mais 
+        legível.
+        
+        . Serial.print("Temperatura: ");: envia o texto "Temperatura: " para o Monitor 
+        Serial.
+        
+        . Serial.print(t);: envia o valor de temperatura lido (:t:) para o Monitor 
+        Serial. Como t é um float, ele também pode incluir casas decimais.
+        
+        . Serial.println(" *C");: adiciona o símbolo de graus Celsius *C após o valor 
+        de temperatura e, em seguida, move o cursor para a próxima linha com println(). 
+        Isso garante que a próxima linha de saída comece em uma nova linha no Monitor 
+        Serial.
+        
+        . if (t > 30.0): verifica se a temperatura lida (t) é maior que 30,0 °C. 
+        Este é o limite estabelecido no código para determinar se a temperatura está 
+        alta.
+        
+        . Serial.println("Alerta: Temperatura alta!");: se a temperatura for maior 
+        que 30 °C, esta mensagem é enviada ao Monitor Serial, alertando o usuário 
+        sobre a alta temperatura.
+        
+        . else { Serial.println("Temperatura dentro do normal."); }: se a temperatura 
+        não exceder 30 °C, esta mensagem é enviada ao Monitor Serial, indicando que a 
+        temperatura está dentro da faixa normal.
+        
+        . delay(2000);: aguarda 2000 milissegundos (2 segundos) antes de executar 
+        novamente o loop. Isso dá tempo para que o sensor estabilize antes da próxima 
+        leitura e evita que o código sobrecarregue o microcontrolador com leituras muito 
+        frequentes.
+
+        

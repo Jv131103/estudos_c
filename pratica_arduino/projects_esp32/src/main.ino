@@ -1,11 +1,13 @@
 // Execuções por arquivos
-void mostrar_variaveis();
+void config_setup_dht();
+void config_loop_dht();
+
 
 void setup() {
-    Serial.begin(115200); // inicia uma vez só
-    mostrar_variaveis();
+    config_setup_dht();
 }
 
+
 void loop() {
-    // seguir sem mostrar
+    config_loop_dht();
 }
