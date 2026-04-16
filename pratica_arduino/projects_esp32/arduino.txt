@@ -206,4 +206,223 @@ Relé:
         leitura e evita que o código sobrecarregue o microcontrolador com leituras muito 
         frequentes.
 
+DHT22:
+
+    O DHT22 é um sensor que mede a temperatura e a umidade. Eles enviam os dados ao 
+    microcontrolador via um único pino de dados. Ele é bem útil para monitorar o ambiente, 
+    automatizar as residências com base na temperatura e desenvolver projetos de IoT 
+    que precise decidir algo com base na temperatura e/ou umidade.
+
+    Na figura “Pinagem do DHT22 com ou sem plaquinha de suporte”, tem-se a pinagem do 
+    sensor de temperatura e umidade. Note que um dos pinos nunca é utilizado caso você 
+    adquira o sensor DHT sem uma plaquinha de suporte. Caso você tenha o sensor com 
+    uma plaquinha de suporte, o pino sem uso já está indisponível.
+
+    O circuito ilustrado na figura “Sensor DHT22 conectado ao ESP32” foi desenvolvido no 
+    Wokwi.com, nosso simulador oficial e gratuito do ESP32 e seus sensores. Note que o 
+    sensor está ligado no pino +5V do lado esquerdo do ESP32. Isso significa que esse 
+    sensor não consegue trabalhar com uma tensão baixa de 3,3V. A sua saída (fio amarelo) 
+    vai produzir níveis de tensão acima de 3,3V (porém até 5V), mas nesse caso, não é 
+    suficiente para danificar a entrada GPIO 23 que ele está conectado.
+
+    Nesse circuito, tem o sensor DHT22 conectado no pino de alimentação de 5V no GND 
+    (que é o pino de 0V), e tem o pino 23 para ler os dados do sensor.
+
+    EX:
+
+        include <DHT.h> 		//precisa incluir essa biblioteca no seu projeto para que o sensor funcione.
+
+        define pinoDHT 23     	//Pino onde o sensor está conectado
+        define modelo DHT22   	//Tipo de sensor DHT22
+
+        DHT dht(pinoDHT, modelo);
+
+        void setup() {
+            Serial.begin(9600);
+            dht.begin();
+        }
+
+        void loop() {
+            float h = dht.readHumidity();
+            float t = dht.readTemperature();
+
+            if (isnan(h) || isnan(t)) {
+                Serial.println("Falha ao ler do sensor DHT!");
+                return;
+            }
+
+            Serial.print("Umidade: ");
+            Serial.print(h);
+            Serial.print(" %\t");
+            Serial.print("Temperatura: ");
+            Serial.print(t);
+            Serial.println(" *C");
+
+            if (t > 30.0) {
+                Serial.println("Alerta: Temperatura alta!");
+            } else {
+                Serial.println("Temperatura dentro do normal.");
+            }
+
+            delay(2000);  		//Aguarda 2 segundos antes de ler novamente
+        }
+
+    Explicação:
+
+        void setup()
+            
+            Executa uma única vez quando o programa inicia
+            
+            Serve para:
+            
+                Inicializar variáveis
+                
+                Configurar pinos
+                
+                Iniciar comunicação serial
+
+        Serial.begin(9600);
+
+            
+            Inicia a comunicação entre o ESP32 e o computador
+            
+            Velocidade: 9600 bits por segundo (baud rate)
+            
+            Permite ver dados no Monitor Serial
+
+        dht.begin();
+            
+            Inicializa o sensor DHT
+            
+            Necessário para começar a leitura de:
+            
+                Temperatura
+                
+                Umidade
+
+        void loop()
+
+            Executa infinitamente enquanto o ESP32 estiver ligado
+            
+            Aqui fica a lógica principal do programa
+
         
+        Leitura dos dados:
+
+            Umidade
+
+                float h = dht.readHumidity();
+                
+                . Lê a umidade atual
+                
+                . Usa float → permite casas decimais
+
+            Temperatura
+
+                float t = dht.readTemperature();
+                
+                . Lê a temperatura atual
+                
+                . Também usa float
+
+            Verificação de erro
+                
+                if (isnan(h) || isnan(t))
+                
+                . Verifica se o valor é NaN (Not a Number)
+                
+                . Isso acontece quando:
+                
+                    . Sensor desconectado
+                
+                    . Falha na leitura
+
+            isnan()
+
+                Retorna true se o valor for inválido
+
+            Tratamento do erro
+
+                Serial.println("Falha ao ler do sensor DHT!");
+                return;
+                
+                . Mostra erro no monitor
+                
+                . return → interrompe o loop atual (evita usar lixo)
+
+            Exibição dos dados
+
+                Serial.print("Umidade: ");
+                Serial.print(h);
+                Serial.print(" %\t");
+                
+                . Mostra a umidade com %
+                
+                . \t → tabulação (organiza melhor)
+
+                Serial.print("Temperatura: ");
+                Serial.print(t);
+                Serial.println(" *C");
+
+                . Mostra temperatura em graus Celsius
+
+            Lógica de alerta
+
+                    if (t > 30.0)
+
+                . Se temperatura > 30°C:
+
+                    Serial.println("Alerta: Temperatura alta!");
+
+                . Caso contrário:
+
+                    Serial.println("Temperatura dentro do normal.");
+
+            Delay
+
+                delay(2000);
+                
+                . Espera 2 segundos
+                
+                . Evita:
+                
+                    Leituras rápidas demais
+                
+                    Sobrecarga do ESP32
+
+Sensor de ultrassônico HC-SR04:
+
+    O sensor ultrassônico HC-SR04 é muito utilizado em projetos que envolvem medição 
+    de distância sem contato. Esse sensor é capaz de medir a distância entre ele e um 
+    objeto à sua frente, utilizando ondas ultrassônicas. Seu alcance pega de 2 cm até 
+    300 cm (o objeto precisa estar no mínimo 2 cm na frente do sensor e no máximo 
+    300 cm).
+
+    No contexto de projetos com o ESP32, o HC-SR04 oferece uma maneira eficaz e 
+    acessível de implementar funcionalidades como detecção de obstáculos, medição 
+    de níveis de líquidos, detecção de objetos em lixeiras, detecção de vagas de 
+    carros em garagens de shopping, sensor de ré de carros, entre outros.
+
+    O HC-SR04 funciona emitindo um sinal ultrassônico de alta frequência (inaudível ao 
+    ouvido humano) por meio de seu transmissor. Esse sinal viaja pelo ar até encontrar 
+    um objeto, e então reflete de volta para o receptor do sensor. O tempo que o sinal 
+    leva para ir, bater no objeto e retornar ao sensor é medido, e com base nessa 
+    informação, a distância até o objeto é calculada.
+
+    Vale mencionar que esse sensor possui um pequeno alto-falante, onde um emite o 
+    som inaudível, e o outro, se assemelha a um microfone, que detecta o echo desse 
+    pulso.
+
+    PROCESSO DE MEDIÇÃO:
+
+        Envio do Pulso (Trigger): o ESP32 envia um pulso elétrico para o pino `
+        Trig` do sensor, fazendo com que ele emita uma onda ultrassônica.
+
+        Recepção do Eco (Echo): quando a onda ultrassônica encontra um objeto, ela é 
+        refletida de volta ao sensor e captada pelo pino `Echo`.
+
+        Cálculo da Distância: o intervalo de tempo entre o envio do pulso e a recepção 
+        do eco é registrado. Como a velocidade do som no ar é conhecida (aproximadamente 
+        343 metros por segundo a 20 °C), o ESP32 pode calcular a distância ao objeto 
+        usando a fórmula:
+
