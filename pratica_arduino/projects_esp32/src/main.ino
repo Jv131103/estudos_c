@@ -1,13 +1,13 @@
 // Execuções por arquivos
-void config_setup_dht();
-void config_loop_dht();
+void setupldr();
+void loopldr();
 
 
 void setup() {
-    config_setup_dht();
+    setupldr();
 }
 
 
 void loop() {
-    config_loop_dht();
+    loopldr();
 }
